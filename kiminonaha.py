@@ -1,6 +1,10 @@
 import cv2
 import numpy as np
-from settings import BACKGROUND_IMAGE_PATH, FOOT_HEIGHT
+from remove_gb import remove_green_chromakey
+
+BACKGROUND_IMAGE_PATH = "backgrounds/kiminonaha1.png"
+FOOT_HEIGHT = 16 if "1" in BACKGROUND_IMAGE_PATH else 64
+OUTPUT_IMAGE_DIR = "output_images"
 
 
 def resize_height_base(image: np.ndarray, height: int) -> np.ndarray:
@@ -31,23 +35,19 @@ def composite_image(background_image: np.ndarray, images: list, center: list) ->
     return background_image
 
 
-def generate(images: list) -> np.ndarray:
-    """2枚の画像を君の名はの背景と合成した画像を生成する
-
-    Args:
-        image (np.ndarray): 入力画像
-
-    Returns:
-        np.ndarray: 生成画像
-    """
+if __name__ == "__main__":
+    print(FOOT_HEIGHT)
+    path_list = ["images/9.png", "images/10.png"]
     background_image = cv2.imread(BACKGROUND_IMAGE_PATH, cv2.IMREAD_UNCHANGED)
     bg_height, bg_width = background_image.shape[:2]
+    print(bg_height, bg_width)
 
     height = bg_height // 2 - FOOT_HEIGHT
     center = (bg_height // 2 + (height // 2), bg_width // 4)
+    print(center)
 
-    # リサイズ（縦height基準）
-    images = [resize_height_base(image, height) for image in images]
+    # 切り出し＋リサイズ（縦height基準）
+    images = [resize_height_base(remove_green_chromakey(path), height) for path in path_list]
 
     # 2枚目の画像のみ左右反転
     images[-1] = cv2.flip(images[-1], 1)
@@ -58,6 +58,6 @@ def generate(images: list) -> np.ndarray:
         images = [image[:, trim:-trim] for image in images]
 
     # 画像を背景画像に合成
+    print(images[0].shape)
     image = composite_image(background_image, images, center)
-
-    return image
+    cv2.imwrite(f"{OUTPUT_IMAGE_DIR}/{BACKGROUND_IMAGE_PATH.split('/')[-1]}", image)
