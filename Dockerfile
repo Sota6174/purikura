@@ -1,7 +1,12 @@
 FROM python:3.9-bullseye
 
 RUN apt update -y && apt upgrade -y && apt install -y \
-  libgl1-mesa-dev
+  libgl1-mesa-dev \
+  imagemagick
 
-COPY ./requirements.txt requirements.txt
-RUN pip install -r requirements.txt
+RUN grep -v '<policy domain="path" rights="none" pattern="@\*"/>' /etc/ImageMagick-6/policy.xml > tmp && \
+  cp tmp /etc/ImageMagick-6/policy.xml
+
+COPY . /src/spcconverter
+WORKDIR /src/spcconverter
+RUN pip install --upgrade pip && pip install -e .

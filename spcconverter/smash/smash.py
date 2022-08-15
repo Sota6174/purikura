@@ -1,40 +1,15 @@
 import glob
 import os.path as op
-
 import cv2
 import numpy as np
 from moviepy.editor import TextClip, ImageClip, CompositeVideoClip
 from moviepy.video.io.VideoFileClip import VideoFileClip
+import pkg_resources
+
+from ..utils.remove_gb import remove_green_chromakey
 
 
-def remove_green_chromakey(path: str):
-    norm_factor = 255
-    image = cv2.imread(path, cv2.IMREAD_UNCHANGED)
-    if image.ndim == 3:  # RGBならアルファチャンネル追加
-        image = cv2.cvtColor(image, cv2.COLOR_RGB2RGBA)
-    # print(image.shape)  # (h, w, 4)
-
-    # 画素の最大輝度値255で各チャンネルの値を正規化
-    red_ratio = image[:, :, 0] / norm_factor
-    green_ratio = image[:, :, 1] / norm_factor
-    blue_ratio = image[:, :, 2] / norm_factor
-
-    # 赤(青) - 緑の値が0以下のとき、そのピクセルは緑色である可能性が高い
-    # 赤(青)も緑も値が小さい（暗い色の）場合まで緑判定しないように0.3を先に足す
-    red_vs_green = (red_ratio - green_ratio) + 0.3
-    blue_vs_green = (blue_ratio - green_ratio) + 0.3
-    red_vs_green[red_vs_green < 0] = 0
-    blue_vs_green[blue_vs_green < 0] = 0
-
-    # alpha値を算出する（輝度値が大きいほどalpha値も大きい）
-    alpha = (red_vs_green + blue_vs_green) * 255
-    alpha[alpha > 50] = 255
-    image[:, :, 3] = alpha
-
-    return image
-
-
-def smash(img, usr_name, output_path, fontsize=280):
+def generate(img, usr_name, output_path, fontsize=280):
     """
     img: remove_green_chromakey()から渡される画像
     usr_name: 参戦させるユーザーの名前
@@ -44,9 +19,15 @@ def smash(img, usr_name, output_path, fontsize=280):
     font: fontのpath
     smash_video_path: 元動画のpath
     """
-    cascade_path = "./haarcascade_frontalface_alt.xml"
-    font = "./GenShinGothic-Bold.ttf"
-    smash_video_path = "./smash-pre.mp4"
+    cascade_path = pkg_resources.resource_filename(
+        "spcconverter", "assets/smash/haarcascade_frontalface_alt.xml"
+    )
+    font = pkg_resources.resource_filename(
+        "spcconverter", "assets/smash/GenShinGothic-Bold.ttf"
+    )
+    smash_video_path = pkg_resources.resource_filename(
+        "spcconverter", "assets/smash/smash-pre.mp4"
+    )
 
     face_cascade = cv2.CascadeClassifier(cascade_path)
 
@@ -119,4 +100,4 @@ if __name__ == "__main__":
     output_path = "./test.mp4"
 
     img = remove_green_chromakey(file_path)
-    smash(img=img, usr_name=usr_name, output_path=output_path)
+    generate(img=img, usr_name=usr_name, output_path=output_path)

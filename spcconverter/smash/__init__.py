@@ -1,0 +1,1 @@
+from .smash import generate

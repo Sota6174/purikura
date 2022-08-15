@@ -2,10 +2,10 @@ import cv2
 import urllib.parse
 import urllib.request
 import tempfile
-import settings
+from .. import settings
 
 
-def generate(img):
+def generate(img, output_path: str):
     url = settings.FACESWAP_INF_SERVER_URL
 
     with tempfile.NamedTemporaryFile(suffix=".png") as f:
@@ -20,9 +20,5 @@ def generate(img):
 
     with urllib.request.urlopen(req) as res:
         swapped_img = res.read()
-        with tempfile.NamedTemporaryFile(suffix=".png") as f:
+        with open(output_path, "wb") as f:
             f.write(swapped_img)
-            f.seek(0)
-            out_data = cv2.imread(f.name)
-
-    return out_data
