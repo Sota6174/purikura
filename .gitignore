@@ -131,5 +131,6 @@ dmypy.json
 images/
 rm_gb_images/
 output_images/
+output/
 
 .env

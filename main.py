@@ -1,31 +1,38 @@
 import os
 import sys
-from remove_gb import remove_green_hsv, remove_green_chromakey
 import cv2
-import settings
+from settings import OUTPUT_DIR
+import smash
 import tane_faceswap
+import kiminonaha
+from remove_gb import remove_green_chromakey
 
-os.makedirs(settings.OUTPUT_IMAGE_DIR, exist_ok=True)
+os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 if __name__ == "__main__":
     _, id, *path_list = sys.argv
-    # print(id, path_list)
+    print(id, path_list)
 
-    output_path_list = []
-    for path in path_list:
-        # image = remove_green_hsv(path)
-        image = remove_green_chromakey(path)
+    # グリーンバックを透明化
+    images = [remove_green_chromakey(image) for image in path_list]
+    print(images[0].shape)
 
-        if id == "0":
-            pass
-        elif id == "1":
-            image = tane_faceswap.generate(image)
-        elif id == "2":
-            pass
+    # 合成画像生成、保存
+    file_name = "temp"  # path_listから生成できたらベスト
 
-        # 画像保存
-        file_name = os.path.basename(path)
-        output_path = os.path.join(settings.OUTPUT_IMAGE_DIR, file_name)
-        cv2.imwrite(output_path, image)
-        output_path_list.append(output_path)
-    print(output_path_list)
+    if id == "0":  # smash
+        user_name = "anonymous"  # file_nameかpath_listから生成できたらベスト
+        clip = smash.generate(images[0], user_name)
+        clip.write_videofile(
+            f"{OUTPUT_DIR}/{file_name}.mp4",
+            codec="libx264",
+            audio_codec="aac",
+            temp_audiofile="temp-audio.m4a",
+            remove_temp=True,
+        )
+    elif id == "1":  # tane_faceswap
+        image = tane_faceswap.generate(images[0])
+        cv2.imwrite(f"{OUTPUT_DIR}/{file_name}.png", image)
+    elif id == "2":  # kiminonaha
+        image = kiminonaha.generate(images)
+        cv2.imwrite(f"{OUTPUT_DIR}/{file_name}.png", image)
