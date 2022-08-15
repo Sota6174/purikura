@@ -130,3 +130,5 @@ dmypy.json
 # ignore all imaages
 images/
 output_images/
+
+.env
