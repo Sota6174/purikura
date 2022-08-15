@@ -129,4 +129,5 @@ dmypy.json
 
 # ignore all imaages
 images/
+rm_gb_images/
 output_images/
