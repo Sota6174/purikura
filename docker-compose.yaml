@@ -1,8 +1,11 @@
 version: "3"
 services:
   dev:
-    image: python:3.9-bullseye
+    container_name: purikura-image-processor-dev
+    build: .
     volumes:
       - .:/src
-    command: "sleep infinity"
+    working_dir: /src
+    command: >
+      bash -c "sleep infinity"
     
