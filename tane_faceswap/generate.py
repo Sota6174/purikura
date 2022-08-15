@@ -7,7 +7,7 @@ from settings import FACESWAP_INF_SERVER_URL
 
 
 def generate(image: np.ndarray) -> np.ndarray:
-    """画像の顔を種市さん（高橋さん）の顔と合成した画像を生成する
+    """画像の顔を種市さんの顔と合成した画像を生成する
 
     Args:
         image (np.ndarray): 入力画像
