@@ -3,11 +3,13 @@ name = "spcconverter"
 version = "0.1.0"
 description = ""
 authors = ["MoAI522 <urotanre522@gmail.com>"]
+include = ["spcconverter/assets/**/*"]
 
 [tool.poetry.dependencies]
 python = "^3.9"
 opencv-python = "^4.6.0"
 python-dotenv = "^0.20.0"
+moviepy = "^1.0.3"
 
 [tool.poetry.dev-dependencies]
 
