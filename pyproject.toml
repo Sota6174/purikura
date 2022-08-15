@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "shinonome-print-club-converter"
+name = "spcconverter"
 version = "0.1.0"
 description = ""
 authors = ["MoAI522 <urotanre522@gmail.com>"]

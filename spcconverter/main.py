@@ -2,10 +2,10 @@ from importlib.resources import path
 import os
 import sys
 from typing import List
-from remove_gb import remove_green_chromakey
+from .remove_gb import remove_green_chromakey
 import cv2
-import settings
-import tane_faceswap
+from . import settings
+from . import tane_faceswap
 
 
 def convert(path_list: List[str], template_id: int):
@@ -13,6 +13,8 @@ def convert(path_list: List[str], template_id: int):
 
     output_path_list = []
     for path in path_list:
+        path = os.path.join(settings.INPUT_DIR, path)
+
         image = remove_green_chromakey(path)
 
         if template_id == "0":

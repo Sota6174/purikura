@@ -23,6 +23,7 @@ def remove_green_hsv(path: str):
 
 def remove_green_chromakey(path: str):
     norm_factor = 255
+    print(path)
     image = cv2.imread(path, cv2.IMREAD_UNCHANGED)
     if image.ndim == 3:  # RGBならアルファチャンネル追加
         image = cv2.cvtColor(image, cv2.COLOR_RGB2RGBA)

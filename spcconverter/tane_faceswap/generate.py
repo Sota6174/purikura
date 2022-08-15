@@ -2,7 +2,7 @@ import cv2
 import urllib.parse
 import urllib.request
 import tempfile
-import settings
+from .. import settings
 
 
 def generate(img):
