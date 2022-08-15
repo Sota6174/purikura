@@ -17,11 +17,11 @@ def convert(path_list: List[str], template_id: int):
 
         image = remove_green_chromakey(path)
 
-        if template_id == "0":
+        if template_id == 0:
             pass
-        elif template_id == "1":
+        elif template_id == 1:
             image = tane_faceswap.generate(image)
-        elif template_id == "2":
+        elif template_id == 2:
             pass
 
         # 画像保存
@@ -29,10 +29,15 @@ def convert(path_list: List[str], template_id: int):
         output_path = os.path.join(settings.OUTPUT_IMAGE_DIR, file_name)
         cv2.imwrite(output_path, image)
         output_path_list.append(output_path)
-    return output_path_list
+
+    if len(output_path_list) == 1:
+        return output_path_list[0]
+    else:
+        return output_path_list
 
 
 if __name__ == "__main__":
     _, id, path_list = sys.argv
+    id = int(id)
     out_paths = convert(path_list=path_list, template_id=id)
     print(out_paths)
