@@ -14,10 +14,11 @@ FONT=./GenShinGothic-Bold.ttf
 SMASH_VIDEO_PATH=./smash-pre.mp4
 FONT_SIZE=200
 
-FACESWAP_INF_SERVER_URL=<[推論用サーバーノートブック](https://colab.research.google.com/drive/1DWNkqhWsqCuLOrphlcC0FhH6ttsFLoHu?usp=sharing)の実行によって生成されるULRを記載>
+FACESWAP_INF_SERVER_URL=<[推論用サーバーノートブック]の実行によって生成されるULRを記載>
 
 BACKGROUND_IMAGE_PATH=<君の名はの背景画像パス>
 ```
+[推論用サーバーノートブック](https://colab.research.google.com/drive/1DWNkqhWsqCuLOrphlcC0FhH6ttsFLoHu?usp=sharing)
 
 ### 実行方法
 * スマブラの参戦ムービー風動画を生成する場合  
