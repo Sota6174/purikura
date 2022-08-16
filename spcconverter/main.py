@@ -53,23 +53,21 @@ def convert_all(path_list: List[str]):
         image = remove_green_chromakey(path)
         return image
 
-    if len(path_list) % 2 != 0:
-        path_list.append(pkg_resources.resource_filename("spcconverter", "assets/kiminonaha/dummy.jpg"))
-    images = [load_and_chromakey(path) for path in path_list]
-
     def get_output_path(suffix):
         file_name = str(uuid.uuid4()) + suffix
-        print(file_name)
         output_path = os.path.join(settings.OUTPUT_IMAGE_DIR, file_name)
-        print(output_path)
         return output_path
 
-    random_index_list = random.sample(range(len(images)), len(images))
+    if len(path_list) % 2 != 0:
+        path_list.append(pkg_resources.resource_filename("spcconverter", "assets/kiminonaha/dummy.jpg"))
+
+    random_index_list = random.sample(range(len(path_list)), len(path_list))
     it = iter(random_index_list)
     for idx1, idx2 in zip(it, it):
-        # print(idx1, idx2)
+        image1 = load_and_chromakey(path_list[idx1])
+        image2 = load_and_chromakey(path_list[idx2])
         output_path = get_output_path(".png")
-        kiminonaha.generate(image1=images[idx1], image2=images[idx2], output_path=output_path)
+        kiminonaha.generate(image1=image1, image2=image2, output_path=output_path)
         output_path_list.append(output_path)
 
     return output_path_list
