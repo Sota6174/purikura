@@ -13,9 +13,7 @@ def remove_green_hsv(path: str):
     # hsv色空間でマスキング処理
     hsv_lower = np.array([30, 64, 0])
     hsv_upper = np.array([90, 255, 255])
-    mask_image = cv2.inRange(
-        hsv, hsv_lower, hsv_upper
-    )  # マスキング処理（緑色を255、緑色以外を0にした画像を生成する）
+    mask_image = cv2.inRange(hsv, hsv_lower, hsv_upper)  # マスキング処理（緑色を255、緑色以外を0にした画像を生成する）
     image = cv2.bitwise_not(image, image, mask=mask_image)  # 元画像とマスク画像の演算（マスク部分削除）
 
     return image
@@ -23,7 +21,6 @@ def remove_green_hsv(path: str):
 
 def remove_green_chromakey(path: str):
     norm_factor = 255
-    print(path)
     image = cv2.imread(path, cv2.IMREAD_UNCHANGED)
     if image.ndim == 3:  # RGBならアルファチャンネル追加
         image = cv2.cvtColor(image, cv2.COLOR_RGB2RGBA)

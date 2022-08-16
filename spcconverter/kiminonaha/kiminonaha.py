@@ -2,7 +2,6 @@ import cv2
 import numpy as np
 import pkg_resources
 from ..utils.remove_gb import remove_green_chromakey
-from .. import settings
 
 
 def resize_height_base(image: np.ndarray, height: int) -> np.ndarray:
@@ -13,9 +12,7 @@ def resize_height_base(image: np.ndarray, height: int) -> np.ndarray:
     return cv2.resize(image, dsize=(width, height))
 
 
-def composite_image(
-    background_image: np.ndarray, images: list, center: list
-) -> np.ndarray:
+def composite_image(background_image: np.ndarray, images: list, center: list) -> np.ndarray:
     """背景画像に画像を合成"""
     centers = [center, [center[0], center[1] * 3]]
     for i in range(2):
@@ -34,16 +31,14 @@ def composite_image(
             w1 -= 1
         for y in range(h1, h2):
             for x in range(w1, w2):
-                if image[y - h1, x - w1, -1] != 0:  # alphaが0で部分だけ上書き
+                if image[y - h1, x - w1, -1] != 0:  # alphaが0の部分だけ上書き
                     background_image[y, x] = image[y - h1, x - w1]
 
     return background_image
 
 
 def generate(image1, image2, output_path):
-    BACKGROUND_IMAGE_PATH = pkg_resources.resource_filename(
-        "spcconverter", "assets/kiminonaha/kiminonaha1.png"
-    )
+    BACKGROUND_IMAGE_PATH = pkg_resources.resource_filename("spcconverter", "assets/kiminonaha/kiminonaha1.png")
     FOOT_HEIGHT = 16 if "1" in BACKGROUND_IMAGE_PATH else 64
 
     background_image = cv2.imread(BACKGROUND_IMAGE_PATH, cv2.IMREAD_UNCHANGED)
@@ -79,9 +74,7 @@ if __name__ == "__main__":
     print(center)
 
     # 切り出し＋リサイズ（縦height基準）
-    images = [
-        resize_height_base(remove_green_chromakey(path), height) for path in path_list
-    ]
+    images = [resize_height_base(remove_green_chromakey(path), height) for path in path_list]
 
     # 2枚目の画像のみ左右反転
     images[-1] = cv2.flip(images[-1], 1)
