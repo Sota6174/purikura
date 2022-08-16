@@ -67,7 +67,7 @@ def convert_all(path_list: List[str]):
     random_index_list = random.sample(range(len(images)), len(images))
     it = iter(random_index_list)
     for idx1, idx2 in zip(it, it):
-        print(idx1, idx2)
+        # print(idx1, idx2)
         output_path = get_output_path(".png")
         kiminonaha.generate(image1=images[idx1], image2=images[idx2], output_path=output_path)
         output_path_list.append(output_path)
