@@ -50,8 +50,8 @@ def generate(image1, image2, output_path):
     images = [resize_height_base(img, height) for img in [image1, image2]]
     images[-1] = cv2.flip(images[-1], 1)
 
-    if images[0].shape[1] > center[1] * 2:
-        trim = (images[0].shape[1] - center[1]) // 2
+    if images[0].shape[1] // 2 > center[1]:
+        trim = images[0].shape[1] // 2 - center[1]
         images = [image[:, trim:-trim] for image in images]
 
     image = composite_image(background_image, images, center)
@@ -80,8 +80,8 @@ if __name__ == "__main__":
     images[-1] = cv2.flip(images[-1], 1)
 
     # 横幅が背景画像からはみ出ないようにトリミング
-    if images[0].shape[1] > center[1] * 2:
-        trim = (images[0].shape[1] - center[1]) // 2
+    if images[0].shape[1] // 2 > center[1]:
+        trim = images[0].shape[1] // 2 - center[1]
         images = [image[:, trim:-trim] for image in images]
 
     # 画像を背景画像に合成
