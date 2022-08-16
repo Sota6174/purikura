@@ -2,7 +2,6 @@ import cv2
 import numpy as np
 import pkg_resources
 from ..utils.remove_gb import remove_green_chromakey
-from .. import settings
 
 
 def resize_height_base(image: np.ndarray, height: int) -> np.ndarray:
