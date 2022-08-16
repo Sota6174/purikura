@@ -1,9 +1,8 @@
 import os
+import spcconverter as spc
 
 os.environ["INPUT_IMAGE_DIR"] = "."
 os.environ["OUTPUT_IMAGE_DIR"] = "./output_images"
-
-import spcconverter as spc
 
 if __name__ == "__main__":
     img_path = "./spcconverter/assets/kiminonaha/dummy.jpg"
