@@ -1,8 +1,6 @@
-from importlib.resources import path
 import os
 import sys
 from typing import List
-import cv2
 import uuid
 import pkg_resources
 
@@ -15,9 +13,7 @@ from . import tane_faceswap
 
 def convert(path_list: List[str], template_id: int, username: str = ""):
     os.makedirs(settings.OUTPUT_IMAGE_DIR, exist_ok=True)
-    dummy_img_path = pkg_resources.resource_filename(
-        "spcconverter", "assets/kiminonaha/dummy.jpg"
-    )
+    dummy_img_path = pkg_resources.resource_filename("spcconverter", "assets/kiminonaha/dummy.jpg")
 
     def load_and_chromakey(path):
         path = os.path.join(settings.INPUT_DIR, path)
