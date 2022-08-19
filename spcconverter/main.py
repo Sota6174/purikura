@@ -7,7 +7,7 @@ import random
 
 from . import smash
 from . import kiminonaha
-from .utils.remove_gb import remove_green_chromakey
+from .utils.remove_gb import remove_green_hsv, remove_green_chromakey
 from . import settings
 from . import tane_faceswap
 
@@ -21,7 +21,12 @@ def convert(path_list: List[str], template_id: int, username: str = ""):
         image = remove_green_chromakey(path)
         return image
 
-    images = [load_and_chromakey(path) for path in [path_list[0], dummy_img_path]]
+    def load_and_hsv(path):
+        path = os.path.join(settings.INPUT_DIR, path)
+        image = remove_green_hsv(path)
+        return image
+
+    images = [load_and_hsv(path) for path in [path_list[0], dummy_img_path]]
 
     def get_output_path(suffix):
         file_name = str(uuid.uuid4()) + suffix
