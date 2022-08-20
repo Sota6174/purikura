@@ -18,11 +18,10 @@ def remove_green_hsv(path: str) -> np.ndarray:
     # bgra色空間に戻す
     image = cv2.cvtColor(image, cv2.COLOR_HSV2BGR)
     image = cv2.cvtColor(image, cv2.COLOR_BGR2BGRA)
-    h, w = image.shape[:2]
-    for y in range(0, h):
-        for x in range(0, w):
-            if np.all(image[y, x, :3] < 1):
-                image[y, x, -1] = 0
+
+    # 背景が黒[0, 0, 0, 255]になっている箇所を透過色[255, 255, 255, 0]に変更する
+    mask_image = cv2.inRange(image, np.array([0, 0, 0, 255]), np.array([0, 0, 0, 255]))
+    image = cv2.bitwise_not(image, image, mask=mask_image)
 
     return image
 
