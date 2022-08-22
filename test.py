@@ -21,6 +21,7 @@ if __name__ == "__main__":
     out_path = spc.convert([img_path], 2, "")
     print(out_path)
 
-    path_list = [path.split("//")[-1] for path in glob.glob("./images/*.png")]
+    path_list = [path.split("\\")[-1] for path in glob.glob("images/*.png")]
+    print(path_list)  # ファイル名だけのリストになっているか確認
     out_path_list = spc.convert_all(path_list)
     print(out_path_list)
