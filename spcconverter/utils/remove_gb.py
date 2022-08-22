@@ -24,8 +24,8 @@ def remove_green_hsv(path: str) -> np.ndarray:
     image = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
 
     # hsv色空間でマスキング画像生成
-    lower = np.array([45, 64, 30])
-    upper = np.array([60, 255, 255])
+    lower = np.array([55, 64, 30])
+    upper = np.array([75, 255, 255])
     mask_image = cv2.inRange(image, lower, upper)  # マスキング処理（緑色を255、緑色以外を0にした画像を生成する）
 
     # BGRA色空間でマスク部分削除
