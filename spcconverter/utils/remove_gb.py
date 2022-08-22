@@ -3,25 +3,35 @@ import numpy as np
 import glob
 
 
+def surround_with_green(path: str) -> np.ndarray:
+    up, down, left, right = 0.15, 0.08, 0.30, 0.30
+
+    image = cv2.imread(path, cv2.IMREAD_UNCHANGED)
+    h, w = image.shape[:2]
+    for y in range(0, h):
+        for x in range(0, w):
+            if (h * up > y) or (y > h * (1 - down)) or (w * left > x) or (x > w * (1 - right)):
+                image[y, x] = [0, 255, 0]
+
+    return image
+
+
 def remove_green_hsv(path: str) -> np.ndarray:
-    image = cv2.imread(path, cv2.IMREAD_UNCHANGED)  # (h, w, 3)
+    # グリーンバック以外の背景をグリーンバックにする
+    image = surround_with_green(path)
 
     # hsvに変換
     image = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
 
-    # hsv色空間でマスキング処理
-    lower = np.array([30, 64, 0])
-    upper = np.array([90, 255, 255])
+    # hsv色空間でマスキング画像生成
+    lower = np.array([45, 64, 30])
+    upper = np.array([60, 255, 255])
     mask_image = cv2.inRange(image, lower, upper)  # マスキング処理（緑色を255、緑色以外を0にした画像を生成する）
-    image = cv2.bitwise_not(image, image, mask=mask_image)  # 元画像とマスク画像の演算（マスク部分削除）
 
-    # bgra色空間に戻す
+    # BGRA色空間でマスク部分削除
     image = cv2.cvtColor(image, cv2.COLOR_HSV2BGR)
     image = cv2.cvtColor(image, cv2.COLOR_BGR2BGRA)
-
-    # 背景が黒[0, 0, 0, 255]になっている箇所を透過色[255, 255, 255, 0]に変更する
-    mask_image = cv2.inRange(image, np.array([0, 0, 0, 255]), np.array([0, 0, 0, 255]))
-    image = cv2.bitwise_not(image, image, mask=mask_image)
+    image = cv2.bitwise_not(image, image, mask=mask_image)  # 元画像とマスク画像の演算（マスク部分削除）
 
     return image
 
