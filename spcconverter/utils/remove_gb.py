@@ -3,10 +3,9 @@ import numpy as np
 import glob
 
 
-def surround_with_green(path: str) -> np.ndarray:
+def surround_with_green(image: np.ndarray) -> np.ndarray:
     up, down, left, right = 0.15, 0.08, 0.30, 0.30
 
-    image = cv2.imread(path, cv2.IMREAD_UNCHANGED)
     h, w = image.shape[:2]
     for y in range(0, h):
         for x in range(0, w):
@@ -17,8 +16,11 @@ def surround_with_green(path: str) -> np.ndarray:
 
 
 def remove_green_hsv(path: str) -> np.ndarray:
-    # グリーンバック以外の背景をグリーンバックにする
-    image = surround_with_green(path)
+    image = cv2.imread(path, cv2.IMREAD_UNCHANGED)
+
+    if "dummy" not in path:
+        # グリーンバック以外の背景をグリーンバックにする
+        image = surround_with_green(image)
 
     # hsvに変換
     image = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
