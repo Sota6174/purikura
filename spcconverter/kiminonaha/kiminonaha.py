@@ -38,8 +38,9 @@ def composite_image(background_image: np.ndarray, images: list, center: list) ->
 
 
 def generate(image1, image2, output_path):
-    BACKGROUND_IMAGE_PATH = pkg_resources.resource_filename("spcconverter", "assets/kiminonaha/kiminonaha1.png")
-    FOOT_HEIGHT = 16 if "1" in BACKGROUND_IMAGE_PATH else 64
+    BACKGROUND_IMAGE_PATH = pkg_resources.resource_filename("spcconverter", "assets/kiminonaha/kiminonaha3.png")
+    FOOT_HEIGHT = 16  # 背景画像がkiminonaha1.png、kiminonaha3.pngの場合
+    # FOOT_HEIGHT = 64    # 背景画像がkiminonaha2.pngの場合
 
     background_image = cv2.imread(BACKGROUND_IMAGE_PATH, cv2.IMREAD_UNCHANGED)
     bg_height, bg_width = background_image.shape[:2]

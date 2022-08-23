@@ -3,17 +3,36 @@ import numpy as np
 import glob
 
 
-def remove_green_hsv(path: str):
-    image = cv2.imread(path, cv2.IMREAD_UNCHANGED)  # (h, w, 3)
-    # print(image.shape)
+def surround_with_green(image: np.ndarray) -> np.ndarray:
+    up, down, left, right = 0.15, 0.08, 0.30, 0.30
+
+    h, w = image.shape[:2]
+    for y in range(0, h):
+        for x in range(0, w):
+            if (h * up > y) or (y > h * (1 - down)) or (w * left > x) or (x > w * (1 - right)):
+                image[y, x] = [0, 255, 0]
+
+    return image
+
+
+def remove_green_hsv(path: str) -> np.ndarray:
+    image = cv2.imread(path, cv2.IMREAD_UNCHANGED)
+
+    if "dummy" not in path:
+        # グリーンバック以外の背景をグリーンバックにする
+        image = surround_with_green(image)
 
     # hsvに変換
-    hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+    image = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
 
-    # hsv色空間でマスキング処理
-    hsv_lower = np.array([30, 64, 0])
-    hsv_upper = np.array([90, 255, 255])
-    mask_image = cv2.inRange(hsv, hsv_lower, hsv_upper)  # マスキング処理（緑色を255、緑色以外を0にした画像を生成する）
+    # hsv色空間でマスキング画像生成
+    lower = np.array([55, 64, 30])
+    upper = np.array([75, 255, 255])
+    mask_image = cv2.inRange(image, lower, upper)  # マスキング処理（緑色を255、緑色以外を0にした画像を生成する）
+
+    # BGRA色空間でマスク部分削除
+    image = cv2.cvtColor(image, cv2.COLOR_HSV2BGR)
+    image = cv2.cvtColor(image, cv2.COLOR_BGR2BGRA)
     image = cv2.bitwise_not(image, image, mask=mask_image)  # 元画像とマスク画像の演算（マスク部分削除）
 
     return image

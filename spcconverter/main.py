@@ -7,7 +7,7 @@ import random
 
 from . import smash
 from . import kiminonaha
-from .utils.remove_gb import remove_green_chromakey
+from .utils.remove_gb import remove_green_hsv
 from . import settings
 from . import tane_faceswap
 
@@ -16,12 +16,12 @@ def convert(path_list: List[str], template_id: int, username: str = ""):
     os.makedirs(settings.OUTPUT_IMAGE_DIR, exist_ok=True)
     dummy_img_path = pkg_resources.resource_filename("spcconverter", "assets/kiminonaha/dummy.jpg")
 
-    def load_and_chromakey(path):
+    def load_and_hsv(path):
         path = os.path.join(settings.INPUT_DIR, path)
-        image = remove_green_chromakey(path)
+        image = remove_green_hsv(path)
         return image
 
-    images = [load_and_chromakey(path) for path in [path_list[0], dummy_img_path]]
+    images = [load_and_hsv(path) for path in [path_list[0], dummy_img_path]]
 
     def get_output_path(suffix):
         file_name = str(uuid.uuid4()) + suffix
@@ -48,9 +48,9 @@ def convert_all(path_list: List[str]):
     os.makedirs(settings.OUTPUT_IMAGE_DIR, exist_ok=True)
     output_path_list = []
 
-    def load_and_chromakey(path):
+    def load_and_hsv(path):
         path = os.path.join(settings.INPUT_DIR, path)
-        image = remove_green_chromakey(path)
+        image = remove_green_hsv(path)
         return image
 
     def get_output_path(suffix):
@@ -64,8 +64,8 @@ def convert_all(path_list: List[str]):
     random_index_list = random.sample(range(len(path_list)), len(path_list))
     it = iter(random_index_list)
     for idx1, idx2 in zip(it, it):
-        image1 = load_and_chromakey(path_list[idx1])
-        image2 = load_and_chromakey(path_list[idx2])
+        image1 = load_and_hsv(path_list[idx1])
+        image2 = load_and_hsv(path_list[idx2])
         output_path = get_output_path(".png")
         kiminonaha.generate(image1=image1, image2=image2, output_path=output_path)
         output_path_list.append(output_path)
