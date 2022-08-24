@@ -29,7 +29,7 @@ def remove_green_hsv(path: str) -> np.ndarray:
     image = cv2.imread(path, cv2.IMREAD_UNCHANGED)
 
     if "dummy" not in path:
-        # グリーンバック以外の背景をグリーンバックにする
+        # グリーンバック以外の背景を除去するために、必要な部分を切り出す
         image = clip_background(image)
         image = super_resolution(image)
 
