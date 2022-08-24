@@ -14,7 +14,9 @@ from . import tane_faceswap
 
 def convert(path_list: List[str], template_id: int, username: str = ""):
     os.makedirs(settings.OUTPUT_IMAGE_DIR, exist_ok=True)
-    dummy_img_path = pkg_resources.resource_filename("spcconverter", "assets/kiminonaha/dummy.jpg")
+    dummy_img_path = pkg_resources.resource_filename(
+        "spcconverter", "assets/kiminonaha/dummy.jpg"
+    )
 
     def load_and_hsv(path):
         path = os.path.join(settings.INPUT_DIR, path)
@@ -36,7 +38,7 @@ def convert(path_list: List[str], template_id: int, username: str = ""):
         pass
     elif template_id == 1:
         output_path = get_output_path(".png")
-        tane_faceswap.generate(img=images[0], output_path=output_path)
+        tane_faceswap.generate(src_image=images[0], output_path=output_path)
     elif template_id == 2:
         output_path = get_output_path(".png")
         kiminonaha.generate(image1=images[0], image2=images[1], output_path=output_path)
@@ -59,7 +61,11 @@ def convert_all(path_list: List[str]):
         return output_path
 
     if len(path_list) % 2 != 0:
-        path_list.append(pkg_resources.resource_filename("spcconverter", "assets/kiminonaha/dummy.jpg"))
+        path_list.append(
+            pkg_resources.resource_filename(
+                "spcconverter", "assets/kiminonaha/dummy.jpg"
+            )
+        )
 
     random_index_list = random.sample(range(len(path_list)), len(path_list))
     it = iter(random_index_list)
