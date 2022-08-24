@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 import glob
-from super_resolution import super_resolution
+from .super_resolution import super_resolution
 
 
 def surround_with_green(image: np.ndarray) -> np.ndarray:
@@ -10,7 +10,12 @@ def surround_with_green(image: np.ndarray) -> np.ndarray:
     h, w = image.shape[:2]
     for y in range(0, h):
         for x in range(0, w):
-            if (h * up > y) or (y > h * (1 - down)) or (w * left > x) or (x > w * (1 - right)):
+            if (
+                (h * up > y)
+                or (y > h * (1 - down))
+                or (w * left > x)
+                or (x > w * (1 - right))
+            ):
                 image[y, x] = [0, 255, 0]
 
     return image
@@ -20,7 +25,9 @@ def clip_background(image: np.ndarray) -> np.ndarray:
     up, down, left, right = 0.15, 0.08, 0.30, 0.30
 
     h, w = image.shape[:2]
-    image = image[int(h * up) : int(h * (1 - down)), int(w * left) : int(w * (1 - right))]
+    image = image[
+        int(h * up) : int(h * (1 - down)), int(w * left) : int(w * (1 - right))
+    ]
 
     return image
 
@@ -29,7 +36,7 @@ def remove_green_hsv(path: str) -> np.ndarray:
     image = cv2.imread(path, cv2.IMREAD_UNCHANGED)
 
     if "dummy" not in path:
-        # グリーンバック以外の背景をグリーンバックにする
+        # グリーンバック以外の背景を除去するために、必要な部分を切り出す
         image = clip_background(image)
         image = super_resolution(image)
 
