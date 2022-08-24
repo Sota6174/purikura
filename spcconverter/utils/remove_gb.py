@@ -31,7 +31,7 @@ def remove_green_hsv(path: str) -> np.ndarray:
     if "dummy" not in path:
         # グリーンバック以外の背景をグリーンバックにする
         image = clip_background(image)
-        iamge = super_resolution(image)
+        image = super_resolution(image)
 
     # hsvに変換
     image = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
